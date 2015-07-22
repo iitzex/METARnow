@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item android:id="@+id/action_add"
+        android:title="Add"
+        android:orderInCategory="90"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/plus"/>
+
+    <item android:id="@+id/action_allMETAR"
+        android:title="METAR"
+        android:orderInCategory="100"
+        android:checkable="true"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_allTAF"
+        android:title="TAF"
+        android:orderInCategory="100"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_allLatest6Hr"
+        android:title="Latest 6 Hr METAR"
+        android:orderInCategory="100"
+        android:checkable="true"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_allNOTAM"
+        android:title="NOTAM"
+        android:orderInCategory="100"
+        android:checkable="true"
+        app:showAsAction="never" />
+</menu>
