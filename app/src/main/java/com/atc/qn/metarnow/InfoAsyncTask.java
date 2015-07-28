@@ -10,12 +10,12 @@ import java.net.URL;
 
 public class InfoAsyncTask extends AsyncTask<Info, Integer, Integer> {
     Info mInfo;
-    public interface OnTaskCompletedListner{
+    public interface OnTaskCompletedListener {
         void onTaskCompleted();
     }
-    private OnTaskCompletedListner listener = null;
+    private OnTaskCompletedListener listener = null;
 
-    public InfoAsyncTask(OnTaskCompletedListner listener){
+    public InfoAsyncTask(OnTaskCompletedListener listener){
         this.listener = listener;
     }
 
@@ -23,32 +23,37 @@ public class InfoAsyncTask extends AsyncTask<Info, Integer, Integer> {
     protected Integer doInBackground(Info... params) {
         mInfo = params[0];
         mInfo.setLoading(true);
-//        listener.onTaskCompleted();
         try {
-            if(mInfo.isShowMETAR()) {
+            if(mInfo.getSetting().METAR) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
-                        mInfo.getName() + "&NHOURS=Lastest&std_trans=standard";
+                        mInfo.getICAO() + "&NHOURS=Lastest&std_trans=standard";
 
                 mInfo.setMETAR(downloadData(addr));
             }
-            if(mInfo.isShowTAF()) {
+            if(mInfo.getSetting().TAF) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_tafs?taf_ids=" +
-                        mInfo.getName() + "&NHOURS=Lastest&std_trans=standard";
+                        mInfo.getICAO() + "&NHOURS=Lastest&std_trans=standard";
 
                 mInfo.setTAF(downloadData(addr));
             }
-            if(mInfo.isShowNOTAM()) {
+            if(mInfo.getSetting().NOTAM) {
                 String addr = "https://pilotweb.nas.faa.gov/PilotWeb/" +
                     "notamRetrievalByICAOAction.do?method=displayByICAOs&formatType=ICAO&" +
-                    "retrieveLocId=" + mInfo.getName() +
+                    "retrieveLocId=" + mInfo.getICAO() +
                     "&reportType=RAW&actionType=notamRetrievalByICAOs";
                 mInfo.setNOTAM(downloadData(addr));
             }
-            if(mInfo.isShowLatest6Hr()) {
+            if(mInfo.getSetting().Last6Hr) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
-                        mInfo.getName() + "&NHOURS=6&std_trans=standard";
+                        mInfo.getICAO() + "&NHOURS=6&std_trans=standard";
 
-                mInfo.setLatest6HrMETAR(downloadData(addr));
+                mInfo.setLast6HrMETAR(downloadData(addr));
+            }
+            if(mInfo.getSetting().Decoded) {
+                String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
+                        mInfo.getICAO() + "&NHOURS=Lastest&std_trans=";
+
+                mInfo.setDecoded(downloadData(addr));
             }
 
         } catch (MalformedURLException e) {

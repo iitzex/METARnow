@@ -8,16 +8,17 @@ android {
         applicationId "com.atc.qn.metarnow"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1_0_2
-        versionName "1.0.2"
+        versionCode 1_1_0
+        versionName "1.1.0"
     }
 
-
     buildTypes {
+        debug {
+            debuggable true
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable false
         }
     }
 }
@@ -25,7 +26,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:cardview-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
 }

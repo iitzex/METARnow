@@ -7,7 +7,11 @@
         android:orderInCategory="90"
         app:showAsAction="ifRoom"
         android:icon="@drawable/plus"/>
-
+    <item android:id="@+id/action_allDecoded"
+        android:title="Decoded METAR"
+        android:orderInCategory="100"
+        android:checkable="true"
+        app:showAsAction="never" />
     <item android:id="@+id/action_allMETAR"
         android:title="METAR"
         android:orderInCategory="100"
@@ -18,9 +22,8 @@
         android:orderInCategory="100"
         android:checkable="true"
         app:showAsAction="never" />
-
     <item android:id="@+id/action_allLatest6Hr"
-        android:title="Latest 6 Hr METAR"
+        android:title="Last 6Hr METAR"
         android:orderInCategory="100"
         android:checkable="true"
         app:showAsAction="never" />
