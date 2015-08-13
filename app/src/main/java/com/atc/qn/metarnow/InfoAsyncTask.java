@@ -75,7 +75,6 @@ public class InfoAsyncTask extends AsyncTask<Info, Integer, Integer> {
         String stringText = "";
         while ((StringBuffer = bufferReader.readLine()) != null) {
             stringText += StringBuffer;
-            //Log.d("ATIS_NOTAM", StringBuffer);
         }
 
         bufferReader.close();

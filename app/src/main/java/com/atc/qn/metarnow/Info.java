@@ -87,7 +87,7 @@ public class Info implements Parcelable{
         this.mWind += gst.equals("") ? "" : ", gusting " + gst;
         this.mVis = vis.equals("") ? "" : translateVis(vis);
         this.mWX = weather.equals("") ? "" : translateWX(weather);
-        this.mCeil = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "0 ft";
+        this.mCeil = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "00 ft";
         this.mTemp = tmp + " °C";
         this.mDew = dew + " °C";
         this.mQNH = QNH + " hPa";
