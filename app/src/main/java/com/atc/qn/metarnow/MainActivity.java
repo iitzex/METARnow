@@ -5,6 +5,7 @@ import com.atc.qn.metarnow.InfoAsyncTask.OnTaskCompletedListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
 
+        savePref();
+    }
+
+    private void savePref() {
         String InfoListJSONString = null;
         try {
             InfoListJSONString = JSONEncode();
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         mSwipe.setColorSchemeResources(
-            R.color.refresh_progress_1, R.color.refresh_progress_2, R.color.refresh_progress_3);
+                R.color.refresh_progress_1, R.color.refresh_progress_2, R.color.refresh_progress_3);
     }
 
     private void syncData() {
@@ -200,6 +205,8 @@ public class MainActivity extends AppCompatActivity
             mInfo.setSetting(setting);
         }
         syncData();
+        savePref();
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -223,6 +230,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        LogD.print(position);
+        Info mInfo = mInfoList.get(position);
+        new InfoAsyncTask(this).execute(mInfo, null, null);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

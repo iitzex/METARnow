@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class Config{
+    boolean showAll = false;
     boolean METAR = true;
     boolean Decoded = false;
     boolean TAF = false;

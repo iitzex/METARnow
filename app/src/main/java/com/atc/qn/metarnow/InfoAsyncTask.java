@@ -24,32 +24,32 @@ public class InfoAsyncTask extends AsyncTask<Info, Integer, Integer> {
         mInfo = params[0];
         mInfo.setLoading(true);
         try {
-            if(mInfo.getSetting().METAR) {
+            if(mInfo.getSetting().METAR | mInfo.getSetting().showAll) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                         mInfo.getICAO() + "&NHOURS=Lastest&std_trans=standard";
 
                 mInfo.setMETAR(downloadData(addr));
             }
-            if(mInfo.getSetting().TAF) {
+            if(mInfo.getSetting().TAF | mInfo.getSetting().showAll) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_tafs?taf_ids=" +
                         mInfo.getICAO() + "&NHOURS=Lastest&std_trans=standard";
 
                 mInfo.setTAF(downloadData(addr));
             }
-            if(mInfo.getSetting().NOTAM) {
+            if(mInfo.getSetting().NOTAM | mInfo.getSetting().showAll) {
                 String addr = "https://pilotweb.nas.faa.gov/PilotWeb/" +
                     "notamRetrievalByICAOAction.do?method=displayByICAOs&formatType=ICAO&" +
                     "retrieveLocId=" + mInfo.getICAO() +
                     "&reportType=RAW&actionType=notamRetrievalByICAOs";
                 mInfo.setNOTAM(downloadData(addr));
             }
-            if(mInfo.getSetting().Last6Hr) {
+            if(mInfo.getSetting().Last6Hr | mInfo.getSetting().showAll) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                         mInfo.getICAO() + "&NHOURS=6&std_trans=standard";
 
                 mInfo.setLast6HrMETAR(downloadData(addr));
             }
-            if(mInfo.getSetting().Decoded) {
+            if(mInfo.getSetting().Decoded | mInfo.getSetting().showAll) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                         mInfo.getICAO() + "&NHOURS=Lastest&std_trans=";
 

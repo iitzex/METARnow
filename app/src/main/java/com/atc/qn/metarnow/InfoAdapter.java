@@ -51,30 +51,30 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
 
         if(mInfo.isExpand()) {
             holder.mImage.setImageResource(R.drawable.expand);
-            if (mInfo.getSetting().Decoded) {
+            if (mInfo.getSetting().Decoded | mInfo.getSetting().showAll) {
                 holder.mDecoder.setVisibility(View.VISIBLE);
             }else
                 holder.mDecoder.setVisibility(View.GONE);
 
-            if (mInfo.getSetting().METAR) {
+            if (mInfo.getSetting().METAR | mInfo.getSetting().showAll) {
                 holder.mMETAR.setVisibility(View.VISIBLE);
                 holder.mMETAR.setText(mInfo.getMETAR());
             }else
                 holder.mMETAR.setVisibility(View.GONE);
 
-            if (mInfo.getSetting().TAF) {
+            if (mInfo.getSetting().TAF | mInfo.getSetting().showAll) {
                 holder.mTAF.setVisibility(View.VISIBLE);
                 holder.mTAF.setText(mInfo.getTAF());
             }else
                 holder.mTAF.setVisibility(View.GONE);
 
-            if (mInfo.getSetting().Last6Hr) {
+            if (mInfo.getSetting().Last6Hr | mInfo.getSetting().showAll) {
                 holder.mLAST6HR.setVisibility(View.VISIBLE);
                 holder.mLAST6HR.setText(mInfo.getLast6HrMETAR());
             }else
                 holder.mLAST6HR.setVisibility(View.GONE);
 
-            if (mInfo.getSetting().NOTAM) {
+            if (mInfo.getSetting().NOTAM | mInfo.getSetting().showAll) {
                 holder.mNOTAM.setVisibility(View.VISIBLE);
                 holder.mNOTAM.setText(mInfo.getNOTAM());
             }else
@@ -87,6 +87,10 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
     @Override
     public int getItemCount() {
         return mInfoList == null ? 0 : mInfoList.size();
+    }
+
+    @Override
+    public void onItemClick(int position) {
     }
 
     @Override
@@ -143,15 +147,27 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
             this.mContext = mContext;
 
             mImage.setOnClickListener(this);
+            v.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            LogD.print(String.valueOf(this.getAdapterPosition()));
-            Info mInfo = mInfoList.get(this.getAdapterPosition());
+            LogD.print(this.getAdapterPosition());
 
-            mInfo.setExpand(!mInfo.isExpand());
-            mContext.onSync();
+            if (v instanceof ImageView) {
+                LogD.print("imageview");
+
+                Info mInfo = mInfoList.get(this.getAdapterPosition());
+                mInfo.setExpand(!mInfo.isExpand());
+                mContext.onSync();
+            }else if (v instanceof View) {
+                LogD.print("view");
+//
+//                Info mInfo = mInfoList.get(this.getAdapterPosition());
+//                mInfo.getSetting().showAll = !mInfo.getSetting().showAll;
+//
+//                mContext.onItemClick(this.getAdapterPosition());
+            }
         }
     }
 }
