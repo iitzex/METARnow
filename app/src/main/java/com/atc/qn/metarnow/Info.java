@@ -1,6 +1,7 @@
 package com.atc.qn.metarnow;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,8 +11,8 @@ class Config{
     boolean METAR = true;
     boolean Decoded = false;
     boolean TAF = false;
-    boolean NOTAM = false;
-    boolean Last6Hr = false;
+    boolean NOTAM = true;
+    boolean Last6Hr = true;
 
     public Config (boolean METAR, boolean Decoded, boolean TAF, boolean NOTAM, boolean Last6Hr) {
         this.METAR = METAR;
@@ -85,7 +86,7 @@ public class Info implements Parcelable{
 
         this.mTime = time + " UTC";
         this.mWind = degree + "° " + scale + " kt";
-        this.mWind += gst.equals("") ? "" : ", gusting " + gst;
+        this.mWind += gst.equals("") ? "" : ", gusting " + gst + "kt";
         this.mVis = vis.equals("") ? "" : translateVis(vis);
         this.mWX = weather.equals("") ? "" : translateWX(weather);
         this.mCeil = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "00 ft";
@@ -100,7 +101,7 @@ public class Info implements Parcelable{
             return vis + " m";
     }
     private String translateWX(String wx){
-        //INTENSITY OR PROXIMITY 1
+                            //INTENSITY OR PROXIMITY 1
         String modifiedWX = wx.replace("-", "Light ")
                             .replace("+", "Heavy ")
                             .replace("VC", "In the vicinity, ")
@@ -219,7 +220,7 @@ public class Info implements Parcelable{
         String result = "";
         int i = 0;
         while (m.find()) {
-            //LogD.print(String.valueOf(i++) + "_" + m.group(1));
+            //LogD.out(String.valueOf(i++) + "_" + m.group(1));
             result += m.group(1) + "\n\n";
         }
         if (result.equals(""))

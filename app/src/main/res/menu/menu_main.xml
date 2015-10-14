@@ -32,4 +32,8 @@
         android:orderInCategory="100"
         android:checkable="true"
         app:showAsAction="never" />
+    <item android:id="@+id/action_sort"
+        android:title="Sort by ICAO"
+        android:orderInCategory="110"
+        app:showAsAction="never" />
 </menu>

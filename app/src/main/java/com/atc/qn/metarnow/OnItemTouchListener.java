@@ -5,4 +5,6 @@ public interface OnItemTouchListener {
     void onItemDismiss(int position);
     void onItemClick(int position);
     void onSync();
+    void onPopHistory(String ICAO);
+    void onPopNOTAM(String ICAO);
 }

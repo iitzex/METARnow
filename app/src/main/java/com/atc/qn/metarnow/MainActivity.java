@@ -5,7 +5,6 @@ import com.atc.qn.metarnow.InfoAsyncTask.OnTaskCompletedListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,20 +12,24 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupWindow;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements nameInputListener, OnTaskCompletedListener, OnItemTouchListener {
     private List<Info> mInfoList = new ArrayList<>();
-    private ArrayList<String> mHistory = new ArrayList<>();
     private SwipeRefreshLayout mSwipe;
     private RecyclerView mRecyclerView;
     private InfoAdapter mAdapter = new InfoAdapter(mInfoList, this);
@@ -53,7 +56,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-
         savePref();
     }
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         try {
             String InfoListJSONString = mPrefs.getString("INFOLIST", "EMPTY!");
             JSONDecode(InfoListJSONString);
-            LogD.print(InfoListJSONString);
+            LogD.out(InfoListJSONString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity
 
         return jsonArray.toString();
     }
+
     private void JSONDecode(String InfoListJSONString) throws JSONException {
         JSONArray jsonArray = new JSONArray(InfoListJSONString);
 
@@ -149,6 +152,26 @@ public class MainActivity extends AppCompatActivity
             new InfoAsyncTask(this).execute(mInfo, null, null);
             mRecyclerView.setAdapter(mAdapter);
         }
+    }
+
+    @Override
+    public void onPopHistory(String ICAO) {
+        HistoryDialog dialog = new HistoryDialog();
+
+        Bundle args = new Bundle();
+        args.putString("ICAO", ICAO);
+        dialog.setArguments(args);
+        dialog.show(getFragmentManager(), "HistoryDialog");
+    }
+
+    @Override
+    public void onPopNOTAM(String ICAO) {
+        NotamDialog dialog = new NotamDialog();
+
+        Bundle args = new Bundle();
+        args.putString("ICAO", ICAO);
+        dialog.setArguments(args);
+        dialog.show(getFragmentManager(), "NotamDialog");
     }
 
     @Override
@@ -200,14 +223,27 @@ public class MainActivity extends AppCompatActivity
             setting.NOTAM = !setting.NOTAM;
         }else if (id == R.id.action_allLatest6Hr) {
             setting.Last6Hr = !setting.Last6Hr;
+        }else if (id == R.id.action_sort) {
+            sortInfoList();
         }
+
         for (Info mInfo: mInfoList) {
             mInfo.setSetting(setting);
         }
+
         syncData();
         savePref();
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sortInfoList() {
+        Collections.sort(mInfoList, new Comparator() {
+            @Override
+            public int compare(Object lhs, Object rhs) {
+                int result = ((Info) lhs).getICAO().compareTo(((Info) rhs).getICAO());
+                return result;
+            }
+        });
     }
 
     @Override
@@ -234,7 +270,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(int position) {
-        LogD.print(position);
+        LogD.out(position);
         Info mInfo = mInfoList.get(position);
         new InfoAsyncTask(this).execute(mInfo, null, null);
         mRecyclerView.setAdapter(mAdapter);
@@ -258,6 +294,7 @@ public class MainActivity extends AppCompatActivity
     public void onSync() {
         onTaskCompleted();
     }
+
 }
 
 

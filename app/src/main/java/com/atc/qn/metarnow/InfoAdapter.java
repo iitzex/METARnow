@@ -2,7 +2,6 @@ package com.atc.qn.metarnow;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +49,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
             holder.mBar.setVisibility(View.VISIBLE);
 
         if(mInfo.isExpand()) {
-            holder.mImage.setImageResource(R.drawable.expand);
+            holder.mExpand.setImageResource(R.drawable.expand);
             if (mInfo.getSetting().Decoded | mInfo.getSetting().showAll) {
                 holder.mDecoder.setVisibility(View.VISIBLE);
             }else
@@ -69,18 +68,23 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
                 holder.mTAF.setVisibility(View.GONE);
 
             if (mInfo.getSetting().Last6Hr | mInfo.getSetting().showAll) {
-                holder.mLAST6HR.setVisibility(View.VISIBLE);
-                holder.mLAST6HR.setText(mInfo.getLast6HrMETAR());
-            }else
-                holder.mLAST6HR.setVisibility(View.GONE);
-
+//                holder.mLAST6HR.setVisibility(View.VISIBLE);
+//                holder.mLAST6HR.setText(mInfo.getLast6HrMETAR());
+                holder.mHistory.setVisibility(View.VISIBLE);
+            }else {
+//                holder.mLAST6HR.setVisibility(View.GONE);
+                holder.mHistory.setVisibility(View.GONE);
+            }
             if (mInfo.getSetting().NOTAM | mInfo.getSetting().showAll) {
-                holder.mNOTAM.setVisibility(View.VISIBLE);
-                holder.mNOTAM.setText(mInfo.getNOTAM());
-            }else
-                holder.mNOTAM.setVisibility(View.GONE);
+//                holder.mNOTAM.setVisibility(View.VISIBLE);
+//                holder.mNOTAM.setText(mInfo.getNOTAM());
+                holder.mAlert.setVisibility(View.VISIBLE);
+            }else {
+//                holder.mNOTAM.setVisibility(View.GONE);
+                holder.mAlert.setVisibility(View.GONE);
+            }
         }else {
-            holder.mImage.setImageResource(R.drawable.collapse);
+            holder.mExpand.setImageResource(R.drawable.collapse);
         }
     }
 
@@ -90,8 +94,11 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
     }
 
     @Override
-    public void onItemClick(int position) {
-    }
+    public void onItemClick(int pos) {}
+    @Override
+    public void onPopHistory(String ICAO) {}
+    @Override
+    public void onPopNOTAM(String ICAO) {}
 
     @Override
     public void onItemDismiss(int position) {
@@ -105,6 +112,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
         notifyItemMoved(fromPosition, toPosition);
         Collections.swap(mInfoList, fromPosition, toPosition);
     }
+
     @Override
     public void onSync(){
         mContext.onSync();
@@ -117,7 +125,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
         TextView mICAO, mMETAR, mTAF, mLAST6HR, mNOTAM;
         TextView mName, mTime, mWind, mVis, mCeil, mTemp, mDew, mQNH, mWX;
         ProgressBar mBar;
-        ImageView mImage;
+        ImageView mExpand, mHistory, mAlert;
         List<Info> mInfoList;
         OnItemTouchListener mContext;
 
@@ -141,33 +149,45 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.ItemViewHolder
             mNOTAM = (TextView) v.findViewById(R.id.text_notam);
 
             mBar = (ProgressBar) v.findViewById(R.id.progressbar);
-            mImage = (ImageView) v.findViewById(R.id.image_expand);
+            mExpand = (ImageView) v.findViewById(R.id.image_expand);
+            mHistory = (ImageView) v.findViewById(R.id.image_history);
+            mAlert = (ImageView) v.findViewById(R.id.image_notam);
 
             this.mInfoList = mInfoList;
             this.mContext = mContext;
 
-            mImage.setOnClickListener(this);
-            v.setOnClickListener(this);
+            mExpand.setOnClickListener(this);
+            mHistory.setOnClickListener(this);
+            mAlert.setOnClickListener(this);
+
+//            v.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            LogD.print(this.getAdapterPosition());
+//            LogD.out(this.getAdapterPosition());
+            Info mInfo = mInfoList.get(this.getAdapterPosition());
 
-            if (v instanceof ImageView) {
-                LogD.print("imageview");
-
-                Info mInfo = mInfoList.get(this.getAdapterPosition());
+            if (String.valueOf(v.getTag()).equals("expand")) {
                 mInfo.setExpand(!mInfo.isExpand());
                 mContext.onSync();
-            }else if (v instanceof View) {
-                LogD.print("view");
+            }else if (String.valueOf(v.getTag()).equals("history")) {
+                mContext.onPopHistory(mInfo.getICAO());
+            }else if (String.valueOf(v.getTag()).equals("notam")) {
+                mContext.onPopNOTAM(mInfo.getICAO());
+            }
+
+//            if (v instanceof ImageView) {
+//            LogD.out("imageview");
+//            }
+//            else if (v instanceof View) {
+//                LogD.out("view");
 //
 //                Info mInfo = mInfoList.get(this.getAdapterPosition());
 //                mInfo.getSetting().showAll = !mInfo.getSetting().showAll;
 //
 //                mContext.onItemClick(this.getAdapterPosition());
-            }
+//            }
         }
     }
 }
