@@ -12,12 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.PopupWindow;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity
         setSwipeLayout();
         setRecycleView();
 
-        recoveryData(savedInstanceState);
+        recoveryData();
     }
 
     @Override
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         Pref.apply();
     }
 
-    private void recoveryData(Bundle savedInstanceState) {
+    private void recoveryData() {
         mPrefs = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
 
         setting.Decoded = mPrefs.getBoolean("SETTING_DECODED", true);

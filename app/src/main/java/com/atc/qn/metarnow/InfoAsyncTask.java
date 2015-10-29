@@ -36,6 +36,7 @@ public class InfoAsyncTask extends AsyncTask<Info, Integer, Integer> {
 
                 mInfo.setTAF(downloadData(addr));
             }
+            /*
             if(mInfo.getSetting().NOTAM | mInfo.getSetting().showAll) {
                 String addr = "https://pilotweb.nas.faa.gov/PilotWeb/" +
                     "notamRetrievalByICAOAction.do?method=displayByICAOs&formatType=ICAO&" +
@@ -43,12 +44,13 @@ public class InfoAsyncTask extends AsyncTask<Info, Integer, Integer> {
                     "&reportType=RAW&actionType=notamRetrievalByICAOs";
                 mInfo.setNOTAM(downloadData(addr));
             }
+
             if(mInfo.getSetting().Last6Hr | mInfo.getSetting().showAll) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                         mInfo.getICAO() + "&NHOURS=6&std_trans=standard";
 
                 mInfo.setLast6HrMETAR(downloadData(addr));
-            }
+            }*/
             if(mInfo.getSetting().Decoded | mInfo.getSetting().showAll) {
                 String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                         mInfo.getICAO() + "&NHOURS=Lastest&std_trans=";
